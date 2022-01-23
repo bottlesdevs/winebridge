@@ -1,0 +1,25 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <OutputType>Exe</OutputType>
+        <TargetFramework>net6.0</TargetFramework>
+        <Authors>bottlesdevs</Authors>
+        <Product>Wine Bridge</Product>
+        <Copyright>bottlesdevs 2022</Copyright>
+        <RepositoryUrl>https://github.com/bottlesdevs/winebridge</RepositoryUrl>
+        <RepositoryType>GIT</RepositoryType>
+        <BuildNumber Condition=" '$(BuildNumber)' == '' ">0</BuildNumber>
+        <VersionSuffix Condition="'$(Configuration)'=='Debug'">-dev</VersionSuffix>
+        <FileVersion>1.0.0.$(BuildNumber)</FileVersion>
+        <Version>1.0.0$(VersionSuffix)</Version>
+        <AssemblyVersion>1.0.0</AssemblyVersion>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+    </PropertyGroup>
+
+    <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+        <DebugType>embedded</DebugType>
+        <DebugSymbols>true</DebugSymbols>
+    </PropertyGroup>
+
+</Project>
