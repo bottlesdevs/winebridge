@@ -1,0 +1,39 @@
+name: CI Release
+
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: 6.0.x
+    - name: Set outputs
+      id: vars
+      run: echo "::set-output name=sha_short::$(git rev-parse --short HEAD)" &&
+           echo "::set-output name=solution_name::WineBridge.sln"
+    - name: Restore dependencies
+      working-directory: src/
+      run: dotnet restore ${{ steps.vars.outputs.solution_name }}
+
+    - name: Publish
+      working-directory: src/WineBridge
+      run: dotnet publish --no-restore -c Release --self-contained true --version-suffix "-${{ steps.vars.outputs.sha_short }}"
+
+    - name: Install zip
+      uses: montudor/action-zip@v0.1.1
+    - name: Zip Release folder
+      run: zip -qq -r WineBridge-${{ steps.vars.outputs.sha_short }}.zip src/WineBridge/bin/Release/net6.0/publish/WineBridge.exe
+
+    - name: Upload Release
+      uses: actions/upload-artifact@v2
+      with:
+        name: Release
+        path: WineBridge-${{ steps.vars.outputs.sha_short }}.zip
