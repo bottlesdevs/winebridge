@@ -30,7 +30,7 @@ jobs:
     - name: Install zip
       uses: montudor/action-zip@v0.1.1
     - name: Zip Release folder
-      run: zip -qq -r WineBridge-${{ steps.vars.outputs.sha_short }}.zip src/WineBridge/bin/Release/net6.0/publish/WineBridge.exe
+      run: zip -qq WineBridge-${{ steps.vars.outputs.sha_short }}.zip src/WineBridge/bin/Release/net6.0/publish/WineBridge.exe
 
     - name: Upload Release
       uses: actions/upload-artifact@v2
