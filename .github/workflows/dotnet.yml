@@ -28,7 +28,7 @@ jobs:
       run: dotnet publish --no-restore -c Release --runtime win-x86 --self-contained true --version-suffix "-${{ steps.vars.outputs.sha_short }}"
 
     - name: Compress Release
-      run: tar cJvf  WineBridge-${{ steps.vars.outputs.sha_short }}.tar.xz src/WineBridge/bin/Release/net6.0/publish/WineBridge.exe
+      run: tar cJvf  WineBridge-${{ steps.vars.outputs.sha_short }}.tar.xz src/WineBridge/bin/Release/net6.0/win-x86/publish/WineBridge.exe
 
     - name: Upload Release
       uses: actions/upload-artifact@v2
