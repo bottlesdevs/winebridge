@@ -27,13 +27,11 @@ jobs:
       working-directory: src/WineBridge
       run: dotnet publish --no-restore -c Release --runtime win-x86 --self-contained true --version-suffix "-${{ steps.vars.outputs.sha_short }}"
 
-    - name: Install zip
-      uses: montudor/action-zip@v0.1.1
-    - name: Zip Release folder
-      run: zip -qq WineBridge-${{ steps.vars.outputs.sha_short }}.zip src/WineBridge/bin/Release/net6.0/publish/WineBridge.exe
+    - name: Compress Release
+      run: tar cJvf  WineBridge-${{ steps.vars.outputs.sha_short }}.tar.xz src/WineBridge/bin/Release/net6.0/publish/WineBridge.exe
 
     - name: Upload Release
       uses: actions/upload-artifact@v2
       with:
         name: Release
-        path: WineBridge-${{ steps.vars.outputs.sha_short }}.zip
+        path: WineBridge-${{ steps.vars.outputs.sha_short }}.tar.xz
