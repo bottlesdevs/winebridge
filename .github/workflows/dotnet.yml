@@ -23,9 +23,9 @@ jobs:
       working-directory: src/
       run: dotnet restore ${{ steps.vars.outputs.solution_name }}
 
-    - name: Publish
+    - name: Publish 
       working-directory: src/WineBridge
-      run: dotnet publish --no-restore -c Release --self-contained true --version-suffix "-${{ steps.vars.outputs.sha_short }}"
+      run: dotnet publish --no-restore -c Release --runtime win-x86 --self-contained true --version-suffix "-${{ steps.vars.outputs.sha_short }}"
 
     - name: Install zip
       uses: montudor/action-zip@v0.1.1
