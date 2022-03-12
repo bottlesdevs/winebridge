@@ -50,5 +50,4 @@ jobs:
         prerelease: false
         automatic_release_tag: ${{ steps.vars.outputs.version_tag }}
         title: ${{ steps.vars.outputs.version_tag }}
-        working-directory: src/WineBridge/bin/Release/net6.0/win-x86/publish
-        files: WineBridge.exe
+        files: src/WineBridge/bin/Release/net6.0/win-x86/publish/WineBridge.exe
