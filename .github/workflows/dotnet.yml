@@ -30,13 +30,27 @@ jobs:
 
     - name: Publish 
       working-directory: src/WineBridge
-      run: dotnet publish --no-restore -c Release --runtime win-x86 --self-contained true /p:FileVersion="${{ steps.vars.outputs.version_tag }}" /p:Version="${{ steps.vars.outputs.version_tag }}" /p:AssemblyVersion="${{ steps.vars.outputs.version_tag }}" --version-suffix "-${{ steps.vars.outputs.sha_short }}"
+      run: dotnet publish --no-restore -c Release --runtime win-x86 --self-contained true \
+        /p:FileVersion="${{ steps.vars.outputs.version_tag }}" \
+        /p:Version="${{ steps.vars.outputs.version_tag }}" \
+        /p:AssemblyVersion="${{ steps.vars.outputs.version_tag }}" \
+        --version-suffix "-${{ steps.vars.outputs.sha_short }}"
 
-    - name: Compress Release
-      run: tar cJvf  WineBridge-${{ steps.vars.outputs.sha_short }}.tar.xz src/WineBridge/bin/Release/net6.0/win-x86/publish/WineBridge.exe
-
-    - name: Upload Release
+    - name: Upload Artifact
       uses: actions/upload-artifact@v2
       with:
-        name: Release
-        path: WineBridge-${{ steps.vars.outputs.sha_short }}.tar.xz
+        working-directory: src/WineBridge/bin/Release/net6.0/win-x86/publish
+        name: WineBridge-${{ steps.vars.outputs.sha_short }}
+        path: WineBridge.exe
+        
+    # Release packages
+    # --------------------------------------        
+    - uses: "marvinpinto/action-automatic-releases@latest"
+      with:
+        repo_token: "${{ secrets.GITHUB_TOKEN }}"
+        draft: false
+        prerelease: false
+        automatic_release_tag: ${{ steps.vars.outputs.version_tag }}
+        title: ${{ steps.vars.outputs.version_tag }}
+        working-directory: src/WineBridge/bin/Release/net6.0/win-x86/publish
+        files: WineBridge.exe
