@@ -2,8 +2,6 @@ name: CI Release
 
 on:
   push:
-    branches:
-      - main
     tags:
       - 1.*.*
   workflow_dispatch:
