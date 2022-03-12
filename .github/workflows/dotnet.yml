@@ -20,7 +20,7 @@ jobs:
     - name: Set outputs
       id: vars
       run: echo "::set-output name=sha_short::$(git rev-parse --short HEAD)" &&
-           echo "::set-output name=version_tag::${GITHUB_REF#refs/*/}"
+           echo "::set-output name=version_tag::${GITHUB_REF#refs/*/}" &&
            echo "::set-output name=solution_name::WineBridge.sln"
     - name: Restore dependencies
       working-directory: src/
