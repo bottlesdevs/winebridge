@@ -17,11 +17,13 @@ jobs:
       uses: actions/setup-dotnet@v1
       with:
         dotnet-version: 6.0.x
+        
     - name: Set outputs
       id: vars
       run: echo "::set-output name=sha_short::$(git rev-parse --short HEAD)" &&
            echo "::set-output name=version_tag::${GITHUB_REF#refs/*/}" &&
            echo "::set-output name=solution_name::WineBridge.sln"
+           
     - name: Restore dependencies
       working-directory: src/
       run: dotnet restore ${{ steps.vars.outputs.solution_name }}
@@ -40,6 +42,12 @@ jobs:
         working-directory: src/WineBridge/bin/Release/net6.0/win-x86/publish
         name: WineBridge-${{ steps.vars.outputs.sha_short }}
         path: WineBridge.exe
+    
+    - name: Package
+      working-directory: src/WineBridge/bin/Release/net6.0/win-x86/publish
+      run: |
+        tar cJvf WineBridge-${{ steps.vars.outputs.sha_short }}.tar.xz WineBridge.exe
+        mv WineBridge-${{ steps.vars.outputs.sha_short }}.tar.xz /tmp/WineBridge-${{ steps.vars.outputs.sha_short }}.tar.xz
         
     # Release packages
     # --------------------------------------        
@@ -50,4 +58,4 @@ jobs:
         prerelease: false
         automatic_release_tag: ${{ steps.vars.outputs.version_tag }}
         title: ${{ steps.vars.outputs.version_tag }}
-        files: src/WineBridge/bin/Release/net6.0/win-x86/publish/WineBridge.exe
+        files: /tmp/WineBridge-${{ steps.vars.outputs.sha_short }}.tar.xz
