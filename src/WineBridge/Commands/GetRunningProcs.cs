@@ -11,8 +11,7 @@ public class GetRunningProcs : ICommand
 
         foreach (var p in processes)
         {
-            var pid = p.Id.ToString("X");
-            output += $"{p.ProcessName} | {pid}\n";
+            output += $"{p.ProcessName}|{p.Id}\n";
         }
 
         Console.WriteLine(output);
