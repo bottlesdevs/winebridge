@@ -9,7 +9,7 @@
         <Copyright>bottlesdevs 2022</Copyright>
         <RepositoryUrl>https://github.com/bottlesdevs/winebridge</RepositoryUrl>
         <RepositoryType>GIT</RepositoryType>
-        <BuildNumber Condition=" '$(BuildNumber)' == '' ">2</BuildNumber>
+        <BuildNumber Condition=" '$(BuildNumber)' == '' ">19</BuildNumber>
         <VersionSuffix Condition="'$(Configuration)'=='Debug'">-dev</VersionSuffix>
         <FileVersion>1.0.0.$(BuildNumber)</FileVersion>
         <Version>1.0.0$(VersionSuffix)</Version>

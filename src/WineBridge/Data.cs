@@ -13,5 +13,6 @@ public class Data
         Commands.Add("KILLPROC", new KillProc());
         Commands.Add("KILLPROCBYNAME", new KillProcByName());
         Commands.Add("RUNEXE", new RunExe());
+        Commands.Add("REGISTRYKEYS", new RegistryKeys());
     }
 }
