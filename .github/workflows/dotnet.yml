@@ -46,7 +46,8 @@ jobs:
     - name: Package
       working-directory: src/WineBridge/bin/Release/net6.0/win-x86/publish
       run: |
-        tar cJvf WineBridge-${{ steps.vars.outputs.sha_short }}.tar.xz WineBridge.exe
+        echo ${{ steps.vars.outputs.version_tag }} >> VERSION
+        tar cJvf WineBridge-${{ steps.vars.outputs.sha_short }}.tar.xz WineBridge.exe VERSION
         mv WineBridge-${{ steps.vars.outputs.sha_short }}.tar.xz /tmp/WineBridge-${{ steps.vars.outputs.sha_short }}.tar.xz
         
     # Release packages
