@@ -31,6 +31,8 @@ jobs:
     - name: Publish 
       working-directory: src/WineBridge
       run: dotnet publish --no-restore -c Release --runtime win-x86 --self-contained true 
+        /p:PublishSingleFile=true 
+        /p:PublishReadyToRun=true 
         /p:FileVersion="${{ steps.vars.outputs.version_tag }}" 
         /p:Version="${{ steps.vars.outputs.version_tag }}" 
         /p:AssemblyVersion="${{ steps.vars.outputs.version_tag }}" 
