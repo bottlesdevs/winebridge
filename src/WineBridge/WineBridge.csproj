@@ -11,9 +11,9 @@
         <RepositoryType>GIT</RepositoryType>
         <BuildNumber Condition=" '$(BuildNumber)' == '' ">7</BuildNumber>
         <VersionSuffix Condition="'$(Configuration)'=='Debug'">-dev</VersionSuffix>
-        <FileVersion>1.1.0.$(BuildNumber)</FileVersion>
-        <Version>1.1.0$(VersionSuffix)</Version>
-        <AssemblyVersion>1.1.0</AssemblyVersion>
+        <FileVersion>1.2.0.$(BuildNumber)</FileVersion>
+        <Version>1.2.0$(VersionSuffix)</Version>
+        <AssemblyVersion>1.2.0</AssemblyVersion>
         <PublishTrimmed>true</PublishTrimmed>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
