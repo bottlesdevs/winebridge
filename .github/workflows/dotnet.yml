@@ -8,56 +8,57 @@ on:
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v2
-    - name: Setup .NET
-      uses: actions/setup-dotnet@v1
-      with:
-        dotnet-version: 6.0.x
-        
-    - name: Set outputs
-      id: vars
-      run: echo "::set-output name=sha_short::$(git rev-parse --short HEAD)" &&
-           echo "::set-output name=version_tag::${GITHUB_REF#refs/*/}" &&
-           echo "::set-output name=solution_name::WineBridge.sln"
-           
-    - name: Restore dependencies
-      working-directory: src/
-      run: dotnet restore ${{ steps.vars.outputs.solution_name }}
+      - uses: actions/checkout@v2
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: 6.0.x
 
-    - name: Publish 
-      working-directory: src/WineBridge
-      run: dotnet publish --no-restore -c Release --runtime win-x86 --self-contained true 
-        /p:PublishSingleFile=true 
-        /p:FileVersion="${{ steps.vars.outputs.version_tag }}" 
-        /p:Version="${{ steps.vars.outputs.version_tag }}" 
-        /p:AssemblyVersion="${{ steps.vars.outputs.version_tag }}" 
-        --version-suffix "-${{ steps.vars.outputs.sha_short }}"
+      - name: Set outputs
+        id: vars
+        run:
+          echo "::set-output name=sha_short::$(git rev-parse --short HEAD)" &&
+          echo "::set-output name=version_tag::${GITHUB_REF#refs/*/}" &&
+          echo "::set-output name=solution_name::WineBridge.sln"
 
-    - name: Upload Artifact
-      uses: actions/upload-artifact@v2
-      with:
+      - name: Restore dependencies
+        working-directory: src/
+        run: dotnet restore ${{ steps.vars.outputs.solution_name }}
+
+      - name: Publish
+        working-directory: src/WineBridge
+        run:
+          dotnet publish --no-restore -c Release --runtime win-x86 --self-contained true
+          /p:PublishSingleFile=true
+          /p:FileVersion="${{ steps.vars.outputs.version_tag }}"
+          /p:Version="${{ steps.vars.outputs.version_tag }}"
+          /p:AssemblyVersion="${{ steps.vars.outputs.version_tag }}"
+          --version-suffix "-${{ steps.vars.outputs.sha_short }}"
+
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v5
+        with:
+          working-directory: src/WineBridge/bin/Release/net6.0/win-x86/publish
+          name: WineBridge-${{ steps.vars.outputs.sha_short }}
+          path: WineBridge.exe
+
+      - name: Package
         working-directory: src/WineBridge/bin/Release/net6.0/win-x86/publish
-        name: WineBridge-${{ steps.vars.outputs.sha_short }}
-        path: WineBridge.exe
-    
-    - name: Package
-      working-directory: src/WineBridge/bin/Release/net6.0/win-x86/publish
-      run: |
-        echo ${{ steps.vars.outputs.version_tag }} >> VERSION
-        tar cJvf WineBridge-${{ steps.vars.outputs.sha_short }}.tar.xz WineBridge.exe VERSION
-        mv WineBridge-${{ steps.vars.outputs.sha_short }}.tar.xz /tmp/WineBridge-${{ steps.vars.outputs.sha_short }}.tar.xz
-        
-    # Release packages
-    # --------------------------------------        
-    - uses: "marvinpinto/action-automatic-releases@latest"
-      with:
-        repo_token: "${{ secrets.GITHUB_TOKEN }}"
-        draft: false
-        prerelease: false
-        automatic_release_tag: ${{ steps.vars.outputs.version_tag }}
-        title: ${{ steps.vars.outputs.version_tag }}
-        files: /tmp/WineBridge-${{ steps.vars.outputs.sha_short }}.tar.xz
+        run: |
+          echo ${{ steps.vars.outputs.version_tag }} >> VERSION
+          tar cJvf WineBridge-${{ steps.vars.outputs.sha_short }}.tar.xz WineBridge.exe VERSION
+          mv WineBridge-${{ steps.vars.outputs.sha_short }}.tar.xz /tmp/WineBridge-${{ steps.vars.outputs.sha_short }}.tar.xz
+
+      # Release packages
+      # --------------------------------------
+      - uses: "marvinpinto/action-automatic-releases@latest"
+        with:
+          repo_token: "${{ secrets.GITHUB_TOKEN }}"
+          draft: false
+          prerelease: false
+          automatic_release_tag: ${{ steps.vars.outputs.version_tag }}
+          title: ${{ steps.vars.outputs.version_tag }}
+          files: /tmp/WineBridge-${{ steps.vars.outputs.sha_short }}.tar.xz
